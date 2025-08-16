@@ -1,71 +1,48 @@
-﻿// See https://aka.ms/new-console-template for more informationu
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using Dapper;
-using HelloWorld.Data;
-using HelloWorld.Models;
-using Microsoft.Data.SqlClient;
-using Microsoft.VisualBasic;
-namespace HelloWorld
+
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+
+builder.Services.AddCors(options =>
 {
+    options.AddPolicy("DevCors",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:5000", "http://localhost:8080")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials();
+                      });
+    options.AddPolicy("ProdCprs",
+                  policy =>
+                  {
+                      policy.WithOrigins("http://MyProductSite.com")
+                      .AllowAnyMethod()
+                      .AllowAnyHeader()
+                      .AllowCredentials();
+                  });
+});
 
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            //  Computer computer = new Computer
-            // {
-            //     Motherboard = "ASUS ROG Strix",
-            //     CPUCores = 8,
-            //     HasWifi = true,
-            //     HasLTE = false,
-            //     ReleaseDate = DateTime.Now,
-            //     Price = 1299.99m,
-            //     VideoCard = "INTEL RTX 3060"
-            // };
-            DataContext dapper = new DataContext();
-            DateTime rightNow = dapper.LoadDataSingle<DateTime>("SELECT GETDATE()");
-            Console.WriteLine($"Current Date and Time: {rightNow}");
+// services.AddResponseCaching();
 
-            // string sql = "Insert into TutorialAppSchema.Computer (Motherboard, CPUCores, HasWifi, HasLTE, Price, VideoCard) VALUES " +
-            //     "('" + computer.VideoCard + "', " +
-            //     computer.CPUCores + ", " +
-            //     (computer.HasWifi ? 1 : 0) + ", " +
-            //     (computer.HasLTE ? 1 : 0) + ", " +
-            //     computer.Price + ", '" +
-            //     computer.VideoCard + "')";
+var app = builder.Build();
 
-            // DBconnection.Execute(sql);
-
-            string SELECTQuery = "SELECT * FROM TutorialAppSchema.Computer";
-            var computers = dapper.LoadData<Computer>(SELECTQuery).ToList();
-            // foreach (var comp in computers)
-            // {
-            //     Console.WriteLine($"Motherboard: {comp.Motherboard}, CPU Cores: {comp.CPUCores}, Has Wifi: {comp.HasWifi}, Has LTE: {comp.HasLTE}, Release Date: {comp.ReleaseDate}, Price: {comp.Price}, Video Card: {comp.VideoCard}");
-            // }
-
-
-            string SELECTQuery2 = "SELECT * FROM TutorialAppSchema.Computer WHERE Motherboard = @Motherboard";
-            var parameters = new { Motherboard = "ASUS ROG STRIX" };
-           Computer? computer = dapper.LoadDataSingle<Computer>(SELECTQuery2, parameters);
-if (computer != null)
+if (app.Environment.IsDevelopment())
 {
-    Console.WriteLine($"Found computer with Motherboard: {computer.Motherboard}, " +
-        $"CPU Cores: {computer.CPUCores}, " +
-        $"Has Wifi: {computer.HasWifi}, " +
-        $"Has LTE: {computer.HasLTE}, " +
-        $"Release Date: {computer.ReleaseDate}, " +
-        $"Price: {computer.Price}, " +
-        $"Video Card: {computer.VideoCard}");
+    app.UseCors("DevCors");
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {
-    Console.WriteLine("No computer found.");
+    app.UseCors("ProdCprs");
+    app.UseHttpsRedirection();
 }
 
-            
-        }
-    }
-}
+app.MapControllers();
+app.Run();
