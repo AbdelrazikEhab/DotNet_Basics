@@ -15,7 +15,6 @@ public class UserController : ControllerBase // Note: Renamed class to follow co
         _dapper = new DataContextDapper(config);
 
     }
-    private static string[] repostryArray = new[] { "ali", "sami", "salem" };
 
     [HttpGet("testConnection")]
     public DateTime testConnection()
@@ -92,5 +91,133 @@ public class UserController : ControllerBase // Note: Renamed class to follow co
         if (_dapper.ExcuteSql(sql)) { return Ok(); }
         throw new Exception("Failed to delete user");
     }
+
+
+    //UserSallery///////////////
+    [HttpPost("CreateUserSalary")]
+    public IActionResult CreateUserSalary(UserSalaryDto user)
+    {
+        string sql = @"
+        INSERT INTO TutorialAppSchema.UserSalary ([Salary])
+        VALUES(" +
+        "'" + user.Salary +
+        "')";
+        Console.WriteLine(sql);
+        if (_dapper.ExcuteSql(sql))
+        { return Ok(); }
+        throw new Exception("Failed to create user");
+    }
+
+    [HttpPut("EditUserSalary")]
+    public IActionResult EditUserSalary(UserSalaryDto user)
+    {
+        string sql = @"
+        UPDATE TutorialAppSchema.UserSalary 
+        SET
+        [Salary]='" + user.Salary + @"'
+        WHERE UserId = '" + user.UserId + @"'";
+
+        if (_dapper.ExcuteSql(sql))
+        { return Ok(); }
+        throw new Exception("Failed to Update user");
+    }
+
+
+
+
+    [HttpGet("UserSalaries")]
+    public IEnumerable<User> getUserSalaries()
+    {
+        string sql = @"
+        SELECT [UserId],[Salary] FROM TutorialAppSchema.UserSalary;
+        ";
+        IEnumerable<User> users = _dapper.loadData<User>(sql);
+        return users;
+
+    }
+
+    [HttpGet("getUserSalary/{userId}")]
+    public User GetUserSalary(int userId)
+    {
+        string sql = @"
+        SELECT [Salary] FROM TutorialAppSchema.UserSalary WHERE UserId =" + userId;
+        User user = _dapper.loadSingleData<User>(sql);
+        return user;
+    }
+
+
+    [HttpDelete("deleteUserSalary/{userId}")]
+    public IActionResult DeleteUserSalary(int userId)
+    {
+        string sql = @"DELETE FROM TutorialAppSchema.UserSalary WHERE UserId = '" + userId + "'";
+        if (_dapper.ExcuteSql(sql)) { return Ok(); }
+        throw new Exception("Failed to delete user");
+    }
+
+
+    //UserInfo///////////////
+
+    [HttpPost("CreateUserJobInfo")]
+    public IActionResult CreateUserJobInfo(UserJobInfoDto user)
+    {
+        string sql = @"
+        INSERT INTO TutorialAppSchema.UserJobInfo ([JopTitle],[Department])
+        VALUES(" +
+        "'" + user.JobTitle +
+        "','" + user.Department +
+        "')";
+        Console.WriteLine(sql);
+        if (_dapper.ExcuteSql(sql))
+        { return Ok(); }
+        throw new Exception("Failed to create user");
+    }
+
+    [HttpPut("EditUserJobInfo")]
+    public IActionResult EditUserJobInfo(UserJobInfoDto user)
+    {
+        string sql = @"
+        UPDATE TutorialAppSchema.UserJobInfo 
+        SET
+        [JobTitle]='" + user.JobTitle + @"'
+        [Department]='" + user.Department + @"'
+        WHERE UserId = '" + user.UserId + @"'";
+
+        if (_dapper.ExcuteSql(sql))
+        { return Ok(); }
+        throw new Exception("Failed to Update user");
+    }
+
+
+
+
+    [HttpGet("UserJobInfos")]
+    public IEnumerable<User> getUserJobInfos()
+    {
+        string sql = @"
+        SELECT [JobTitle],[Department] FROM TutorialAppSchema.UserJobInfo;
+        ";
+        IEnumerable<User> users = _dapper.loadData<User>(sql);
+        return users;
+
+    }
+
+    [HttpGet("getUserJobInfo/{userId}")]
+    public User GetUserJobInfo(int userId)
+    {
+        string sql = @"
+        SELECT [JobTitle],[Department] FROM TutorialAppSchema.UserJobInfo WHERE UserId =" + userId;
+        User user = _dapper.loadSingleData<User>(sql);
+        return user;
+    }
+
+
+    [HttpDelete("deleteUserJobInfo/{userId}")]
+    public IActionResult DeleteUserJobInfo(int userId)
+    {
+        string sql = @"DELETE FROM TutorialAppSchema.UserJobInfo WHERE UserId = '" + userId + "'";
+        if (_dapper.ExcuteSql(sql)) { return Ok(); }
+        throw new Exception("Failed to delete user");
+    }
+
 }
 

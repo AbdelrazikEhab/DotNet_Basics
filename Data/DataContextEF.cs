@@ -1,39 +1,49 @@
 using System.Data;
 using Dapper;
+using DotNetAPI.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetAPI.Data
 {
-    class DataContextEF :DbContext
+    class DataContextEF : DbContext
     {
         private readonly IConfiguration _config;
 
-        public DataContextEF (IConfiguration config)
+        public DataContextEF(IConfiguration config)
         {
             _config = config;
+        }
+        public virtual DbSet<User> Users { set; get; }
+        public virtual DbSet<UserSalary> UserSalary { set; get; }
+        public virtual DbSet<UserJobInfo> UserJobInfo { set; get; }
 
-        }
-        public IEnumerable<T> loadData<T>(string sql)
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            IDbConnection dbConnection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            return dbConnection.Query<T>(sql);
-        }
-        public T loadSingleData<T>(string sql)
-        {
-            IDbConnection dbConnection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            return dbConnection.QuerySingle<T>(sql);
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(_config.GetConnectionString("DefaultConnection"),
+                 optionsBuilder => optionsBuilder.EnableRetryOnFailure());
+            }
         }
 
-        public bool ExcuteSql(string sql)
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            IDbConnection dbConnection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            return dbConnection.Execute(sql) > 0;
+            modelBuilder.HasDefaultSchema("TutorialAppSchema");
+
+            modelBuilder.Entity<User>()
+            .ToTable("Users", "TutorialAppSchema")
+            .HasKey(u => u.UserId);
+
+            modelBuilder.Entity<UserSalary>()
+         .HasKey(u => u.UserId);
+
+            modelBuilder.Entity<UserJobInfo>()
+         .HasKey(u => u.UserId);
         }
-        public int ExcuteSqlWithRowCount(string sql)
-        {
-            IDbConnection dbConnection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            return dbConnection.Execute(sql);
-        }
+
+
     }
 }

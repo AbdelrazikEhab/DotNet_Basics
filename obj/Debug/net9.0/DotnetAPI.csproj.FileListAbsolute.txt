@@ -171,3 +171,7 @@ F:\Revision of My Carear\Projects\projevtNet\New folder\DotNet_Basics\obj\Debug\
 F:\Revision of My Carear\Projects\projevtNet\New folder\DotNet_Basics\obj\Debug\net9.0\DotnetAPI.csproj.Up2Date
 F:\Revision of My Carear\Projects\projevtNet\New folder\DotNet_Basics\obj\Debug\net9.0\DotnetAPI.genruntimeconfig.cache
 F:\Revision of My Carear\Projects\projevtNet\New folder\DotNet_Basics\obj\Debug\net9.0\ref\DotnetAPI.dll
+F:\Revision of My Carear\Projects\projevtNet\New folder\DotNet_Basics\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
+F:\Revision of My Carear\Projects\projevtNet\New folder\DotNet_Basics\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+F:\Revision of My Carear\Projects\projevtNet\New folder\DotNet_Basics\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Abstractions.dll
+F:\Revision of My Carear\Projects\projevtNet\New folder\DotNet_Basics\bin\Debug\net9.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
