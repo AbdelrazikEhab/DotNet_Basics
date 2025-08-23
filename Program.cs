@@ -1,4 +1,6 @@
+﻿
 
+using DotNetAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,8 +30,7 @@ builder.Services.AddCors(options =>
                   });
 });
 
-// services.AddResponseCaching();
-
+builder.Services.AddScoped<IUserReposirory, UserReposirory>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

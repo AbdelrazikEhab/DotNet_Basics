@@ -33,7 +33,7 @@ public class UserController : ControllerBase // Note: Renamed class to follow co
         "'" + user.FirstName +
         "','" + user.LastName +
         "','" + user.Email +
-        "','" + user.Active +
+        "','" + user.Gender +
         "','" + user.Active +
         "')";
         Console.WriteLine(sql);
@@ -95,7 +95,7 @@ public class UserController : ControllerBase // Note: Renamed class to follow co
 
     //UserSallery///////////////
     [HttpPost("CreateUserSalary")]
-    public IActionResult CreateUserSalary(UserSalaryDto user)
+    public IActionResult CreateUserSalary(UserSalary user)
     {
         string sql = @"
         INSERT INTO TutorialAppSchema.UserSalary ([Salary])
@@ -109,7 +109,7 @@ public class UserController : ControllerBase // Note: Renamed class to follow co
     }
 
     [HttpPut("EditUserSalary")]
-    public IActionResult EditUserSalary(UserSalaryDto user)
+    public IActionResult EditUserSalary(UserSalary user)
     {
         string sql = @"
         UPDATE TutorialAppSchema.UserSalary 
@@ -158,7 +158,7 @@ public class UserController : ControllerBase // Note: Renamed class to follow co
     //UserInfo///////////////
 
     [HttpPost("CreateUserJobInfo")]
-    public IActionResult CreateUserJobInfo(UserJobInfoDto user)
+    public IActionResult CreateUserJobInfo(UserJobInfo user)
     {
         string sql = @"
         INSERT INTO TutorialAppSchema.UserJobInfo ([JopTitle],[Department])
@@ -173,7 +173,7 @@ public class UserController : ControllerBase // Note: Renamed class to follow co
     }
 
     [HttpPut("EditUserJobInfo")]
-    public IActionResult EditUserJobInfo(UserJobInfoDto user)
+    public IActionResult EditUserJobInfo(UserJobInfo user)
     {
         string sql = @"
         UPDATE TutorialAppSchema.UserJobInfo 
